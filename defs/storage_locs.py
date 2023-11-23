@@ -1,6 +1,8 @@
 from pathlib import Path
 import os
 
+VALID_DATASETS = ['center_left_1', 'center_right_1', 'center_left_3_sunglare']
+
 RAW_VIDEO_PATH = 'full_footage/'
 BASE_PATH = Path(__file__).parent.parent.parent if __file__ else Path('.')
 
@@ -65,3 +67,15 @@ def processed_annotations_path(filename):
     path = Path(PROCESSED_ANNOTATIONS_PATH) / filename
     return path_wrapper(path)
 
+NUMPY_DATA_PATH = 'data/numpy'
+
+def numpy_data_filepaths(video_name, shape):
+    """
+    video_name: ex. 'center_right_1'
+    shape: ex. '224x224' width x height
+    returns [data/numpy/video_name_X.npy, data/numpy/video_name_y.npy]
+    """
+    path = Path(NUMPY_DATA_PATH) / shape
+    os.makedirs(path, exist_ok=True)
+    paths = [path / f'{video_name}_X.npy', path / f'{video_name}_y.npy']
+    return [path_wrapper(path) for path in paths]

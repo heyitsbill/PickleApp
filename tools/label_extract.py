@@ -32,7 +32,7 @@ def extract_cvat_annotations(cvat_xml_path, start_frame = None, end_frame = None
                     labels[child.attrib['name']] = child.text
             frame_labels[frame] = labels
     metadata = {}
-    metadata['task'] = {node.tag: node.text for node in root.find('meta').find('task')}
+    metadata['task'] = {node.tag: node.text for node in root.find('meta').find('task')} if root.find('meta').find('task') is not None else None
     metadata['dumped'] = root.find('meta').find('dumped').text
     return {'metadata': metadata, 'frames': frame_labels, 'start_frame': start_frame, 'end_frame': end_frame}
 
