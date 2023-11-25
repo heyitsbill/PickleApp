@@ -1,4 +1,7 @@
 import cv2
+import random
+from tools.label_extract import group_points_by_2
+from tools.visualization import plot_image
 
 def plot_labels(img, labels, color=(0, 255, 0), copy=True, withLines=False):
     """
@@ -6,7 +9,7 @@ def plot_labels(img, labels, color=(0, 255, 0), copy=True, withLines=False):
     color should be in BGR format
     """
     if copy:
-        img = img.copy()
+        img = img.copy().astype('uint8')
     
     # scale circle and text label sizes according to image size
     if img.shape[0] > 1000:
@@ -24,7 +27,27 @@ def plot_labels(img, labels, color=(0, 255, 0), copy=True, withLines=False):
         labels = list(labels)
         # connect 1 to 3, 3 to 6, 6 to 4, 4 to 1, 9 to 10, 2 to 5
         connections = [(0, 2), (2, 5), (5, 3), (3, 0), (8, 9), (1, 4)]
+        connections = [c for c in connections if c[0]<len(labels) and c[1]<len(labels)]
         for connection in connections:
             cv2.line(img, (int(labels[connection[0]][0]), int(labels[connection[0]][1])), (int(labels[connection[1]][0]), int(labels[connection[1]][1])), color, 2)
     return img
 
+def plot_random_labeled_image(X, y, withLines = False, scale_labels = True):
+    """
+    If scale_labels is True, then the labels are scaled to the image size
+    """
+    if scale_labels:
+        label_dimensions = (1920, 1080)
+        scaling_factor = (X.shape[2]/label_dimensions[0], X.shape[1]/label_dimensions[1])
+        num_coords = y.shape[1]
+        y = y.reshape(-1, num_coords//2, 2)
+        y = y * scaling_factor
+        y = y.reshape(-1, num_coords)
+
+    sample = random.randint(0, len(X)-1)
+    img = X[sample]
+    labels = y[sample]
+    labels = group_points_by_2(labels)
+    plotted = plot_labels(img, labels, withLines=withLines)
+    plot_image(plotted)
+    pass

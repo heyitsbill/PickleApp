@@ -79,3 +79,29 @@ def numpy_data_filepaths(video_name, shape):
     os.makedirs(path, exist_ok=True)
     paths = [path / f'{video_name}_X.npy', path / f'{video_name}_y.npy']
     return [path_wrapper(path) for path in paths]
+
+WEIGHTS_PATH = 'weights/'
+
+def weights_file(filename):
+    """
+    filename: ex. 'center_right_1.h5'
+    """
+    if not filename.endswith('.h5'):
+        filename = filename + '.h5'
+    path = Path(WEIGHTS_PATH) / filename
+    return path_wrapper(path)
+
+CUSTOM_PATH = 'data/custom/'
+
+def custom_path(data_name):
+    path = Path(CUSTOM_PATH) / data_name
+    os.makedirs(path, exist_ok=True)
+    return path_wrapper(path)
+
+def custom_image_path(data_name, frame):
+    path = Path(CUSTOM_PATH) / data_name / f'{data_name}_{frame}.jpg'
+    return path_wrapper(path)
+
+def custom_label_path(data_name):
+    path = Path(CUSTOM_PATH) / data_name / f'{data_name}.pkl'
+    return path_wrapper(path)
