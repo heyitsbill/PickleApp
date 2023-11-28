@@ -1,7 +1,14 @@
 from pathlib import Path
 import os
 
-VALID_DATASETS = ['center_left_1', 'center_right_1', 'center_left_3_sunglare']
+VALID_DATASETS = ['center_left_1',
+                  'center_right_1',
+                  'center_left_3_sunglare']
+VALID_FLIPPED_DATASETS = [f'{dataset}_flip' for dataset in VALID_DATASETS]
+VALID_AFFINE_DATASETS = [f'{dataset}_affine' for dataset in VALID_FLIPPED_DATASETS + VALID_DATASETS]
+VALID_CUSTOM_DATASETS = VALID_FLIPPED_DATASETS + VALID_AFFINE_DATASETS
+ALL_DATASETS = [(dataset, False) for dataset in VALID_DATASETS] + [(dataset, True) for dataset in VALID_CUSTOM_DATASETS]
+ALL_DATASETS_NAMES = [dataset[0] for dataset in ALL_DATASETS]
 
 RAW_VIDEO_PATH = 'full_footage/'
 BASE_PATH = Path(__file__).parent.parent.parent if __file__ else Path('.')
@@ -103,5 +110,5 @@ def custom_image_path(data_name, frame):
     return path_wrapper(path)
 
 def custom_label_path(data_name):
-    path = Path(CUSTOM_PATH) / data_name / f'{data_name}.pkl'
+    path = Path(CUSTOM_PATH) / data_name / f'{data_name}.json'
     return path_wrapper(path)

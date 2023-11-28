@@ -2,7 +2,9 @@ import cv2
 from tools.label_extract import read_extracted_labels
 import json
 import os
+import numpy as np
 import shutil
+from defs.storage_locs import *
 
 def extract_images_from_frames(video_path, frames: list[int], output_path, image_name):
     cap = cv2.VideoCapture(video_path)
@@ -33,3 +35,26 @@ def extract_labeled_images(label_path, video_path, output_path, image_name):
     extract_images_from_frames(video_path, labeled_frames, output_path, image_name)
     shutil.copy(label_path, os.path.join(output_path, os.path.basename(label_path)))
 
+def read_frames(video_path, frames, resize_to = None, swap_colors = True):
+    cap = cv2.VideoCapture(video_path)
+    images = []
+    for frame in frames:
+        cap.set(cv2.CAP_PROP_POS_FRAMES, frame)
+        success, image = cap.read()
+        if success:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            if resize_to is not None:
+                image = cv2.resize(image, resize_to, interpolation=cv2.INTER_AREA)
+            images.append(image)
+    return np.array(images)
+
+def read_frame(video_path, frame, resize_to = None, swap_colors = True):
+    cap = cv2.VideoCapture(video_path)
+    cap.set(cv2.CAP_PROP_POS_FRAMES, frame)
+    success, image = cap.read()
+    if success:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        if resize_to is not None:
+            image = cv2.resize(image, resize_to, interpolation=cv2.INTER_AREA)
+        return image
+    return None

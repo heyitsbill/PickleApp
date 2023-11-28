@@ -83,6 +83,9 @@ def apply_random_affine_and_flip(X, y, times = 1, rotation_range = (0,0), transl
         y_flip.append(np.array(new_labels))
     return (np.array(X_flip), np.array(y_flip))
 
+def apply_flip(X, y):
+    return apply_random_affine_and_flip(X, y, rotation_range = (0,0), translation_range = ((0,0), (0, 0)), replace_with = 'self', flip_rate = 1)
+
 
             
 
