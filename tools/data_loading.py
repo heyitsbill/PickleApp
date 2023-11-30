@@ -66,32 +66,35 @@ def save_data_to_numpy(dataset_name, resize_to = None, outx_path = None, outy_pa
         np.save(default_outy_path, y)
     return X, y
 
-def load_numpy_data(dataset_names, shape, save = True, save_train_split = None):
+def load_numpy_data(dataset_names, shape, save = True, save_train_split = None, save_name=None, input_dirname = None, output_dirname = None):
     """
     shape: string with format 'widthxheight'
     return X and y as numpy arrays with all the data
     save_train_split: ratio of data to save for testing
     """
+    if save_name is None:
+        save_name = 'all'
+    
     if isinstance(dataset_names, str):
         dataset_names = [dataset_names]
     X = []
     y = []
     for dataset_name in dataset_names:
-        X.append(np.load(numpy_data_filepaths(dataset_name, shape)[0]))#, allow_pickle=True))
-        y.append(np.load(numpy_data_filepaths(dataset_name, shape)[1], allow_pickle=True))
+        X.append(np.load(numpy_data_filepaths(dataset_name, shape, input_dirname)[0]))#, allow_pickle=True))
+        y.append(np.load(numpy_data_filepaths(dataset_name, shape, input_dirname)[1], allow_pickle=True))
     X = np.concatenate(X, axis=0)
     y = np.concatenate(y, axis=0)
     if save:
-        np.save(numpy_data_filepaths('all', shape)[0], X)
-        np.save(numpy_data_filepaths('all', shape)[1], y)
+        np.save(numpy_data_filepaths(save_name, shape, output_dirname)[0], X)
+        np.save(numpy_data_filepaths(save_name, shape, output_dirname)[1], y)
         print("Saved data with shape (width, height):", shape, f"for {len(dataset_names)} datasets", dataset_names, f"({len(X)} images total)")
     
     if (save_train_split is not None) and save:
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=save_train_split, random_state=42)
-        np.save(numpy_data_filepaths('train', shape)[0], X_train)
-        np.save(numpy_data_filepaths('train', shape)[1], y_train)
-        np.save(numpy_data_filepaths('test', shape)[0], X_test)
-        np.save(numpy_data_filepaths('test', shape)[1], y_test)
+        np.save(numpy_data_filepaths(save_name + '_train', shape, output_dirname)[0], X_train)
+        np.save(numpy_data_filepaths(save_name + '_train', shape, output_dirname)[1], y_train)
+        np.save(numpy_data_filepaths(save_name + '_test', shape, output_dirname)[0], X_test)
+        np.save(numpy_data_filepaths(save_name + '_test', shape, output_dirname)[1], y_test)
         print("Saved train/test split with shape (width, height):", shape, f"for {len(dataset_names)} datasets", dataset_names, f"({len(X_train)} training images, {len(X_test)} testing images)")
     return X, y.astype('float32')
 

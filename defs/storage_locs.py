@@ -35,7 +35,7 @@ def extracted_path(video_name):
     Create path if doesn't exist
     """
     path = Path(EXTRACTED_PATH) / video_name
-    os.makedirs(path, exist_ok=True)
+    os.makedirs(path_wrapper(path), exist_ok=True)
     return path_wrapper(path)
     
 def extracted_image_path(video_name, frame):
@@ -76,14 +76,17 @@ def processed_annotations_path(filename):
 
 NUMPY_DATA_PATH = 'data/numpy'
 
-def numpy_data_filepaths(video_name, shape):
+def numpy_data_filepaths(video_name, shape, output_dir = None):
     """
     video_name: ex. 'center_right_1'
     shape: ex. '224x224' width x height
     returns [data/numpy/video_name_X.npy, data/numpy/video_name_y.npy]
     """
-    path = Path(NUMPY_DATA_PATH) / shape
-    os.makedirs(path, exist_ok=True)
+    if output_dir is not None:
+        path = Path(NUMPY_DATA_PATH) / shape / output_dir
+    else:
+        path = Path(NUMPY_DATA_PATH) / shape
+    os.makedirs(path_wrapper(path), exist_ok=True)
     paths = [path / f'{video_name}_X.npy', path / f'{video_name}_y.npy']
     return [path_wrapper(path) for path in paths]
 
@@ -102,7 +105,7 @@ CUSTOM_PATH = 'data/custom/'
 
 def custom_path(data_name):
     path = Path(CUSTOM_PATH) / data_name
-    os.makedirs(path, exist_ok=True)
+    os.makedirs(path_wrapper(path), exist_ok=True)
     return path_wrapper(path)
 
 def custom_image_path(data_name, frame):

@@ -70,7 +70,9 @@ def apply_random_affine_and_flip(X, y, times = 1, rotation_range = (0,0), transl
         if flip:
             X = cv2.flip(X, 1)
         
-        width = X.shape[1]
+        # width = X.shape[1]
+        width = 1920
+
         point_labels = group_points_by_2(y)
         new_labels = []
         for pair in point_labels:

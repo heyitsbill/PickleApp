@@ -29,7 +29,7 @@ def plot_labels(img, labels, color=(0, 255, 0), copy=True, withLines=False, with
         text_size = 2
     else:
         circle_size = 2
-        text_size = 0.5
+        text_size = 1
 
     for i, label in enumerate(labels):
         cv2.circle(img, (int(label[0]), int(label[1])), circle_size, color, -1)
