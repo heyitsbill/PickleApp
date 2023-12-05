@@ -21,7 +21,7 @@ def raw_video_path(type, filename):
     type: 'court' or 'game'
     filename: ex. 'center_right_1.MOV'
     """
-    if not filename.endswith('.MOV'):
+    if not (filename.endswith('.MOV') or  filename.endswith('.mp4')):
         filename = filename + '.MOV'
     path = Path(RAW_VIDEO_PATH) / type / filename
     return path_wrapper(path)
