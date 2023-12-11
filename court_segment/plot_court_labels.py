@@ -45,7 +45,7 @@ def plot_labels(img, labels, color=(0, 255, 0), copy=True, withLines=False, with
             cv2.line(img, (int(labels[connection[0]][0]), int(labels[connection[0]][1])), (int(labels[connection[1]][0]), int(labels[connection[1]][1])), color, 2)
     return img
 
-def plot_random_labeled_image(X, y, withLines = False, scale_labels = True):
+def plot_random_labeled_image(X, y, withLines = False, scale_labels = True, show_axes = True):
     """
     If scale_labels is True, then the labels are scaled to the image size
     """
@@ -62,5 +62,5 @@ def plot_random_labeled_image(X, y, withLines = False, scale_labels = True):
     labels = y[sample]
     labels = group_points_by_2(labels)
     plotted = plot_labels(img, labels, withLines=withLines)
-    plot_image(plotted)
+    plot_image(plotted, show_axes=show_axes)
     pass
